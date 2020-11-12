@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="oracle.mybatis.EmpMapper">
+	<select id="getBoardList" parameterType="map" resultType="map">
+		  SELECT B_NUM, B_CLASS, B_TITLE, B_CONTENTS, B_AUTHOR, TO_CHAR(B_DATE,'YYYY-MM-DD') B_DATE, B_PVIEW 
+		  FROM BOARD
+		 <where>
+		 	<if test='ubNum !=null'>
+		 		and B_NUM = #{keyword}
+		 	</if>
+		 	<if test='ubClass !=null'>
+		 		and B_CLASS = #{keyword}
+		 	</if>
+		 	<if test='ubTitle !=null'>
+		 		and B_TITLE LIKE '%'||#{keyword}||'%'
+		 	</if>		 	
+        		   	<if test='ubContents !=null and ubContents.length>0'>
+        		   and B_CONTENTS LIKE '%'||#{keyword}||'%'
+				 	</if>		 	
+		 		<if test='ubAuthor !=null and ubAuthor.length>0'>
+					and B_AUTHOR LIKE '%'||#{keyword}||'%'
+			</if>
+		 </where>
+		 ORDER BY B_NUM DESC
+	</select>
+	<insert id="insertBoard" parameterType="map">
+		INSERT into BOARD (B_NUM, B_CLASS, B_TITLE, B_CONTENTS, B_AUTHOR, B_DATE, B_PVIEW)  
+		VALUES (B_SEQ.NEXTVAL, #{b_class},#{b_title},#{b_contents},#{b_author}, TO_CHAR(SYSDATE,'YYYY-MM-DD'),0)
+	</insert>
+	
+	<update id="updateBoardList" parameterType="map">
+        update BOARD set
+        <if test='b_class !=null'>
+            B_CLASS = #{b_class}
+           </if>
+           <if test='b_title !=null and b_title.length>0'>
+            ,B_TITLE = #{b_title}
+           </if>
+           	<if test='b_contents !=null and b_contents.length>0'>
+            ,B_CONTENTS = #{b_contents}
+		 	</if>		 	
+        where B_NUM = #{b_num}
+    </update>
+    <update id="updatePview" parameterType="int">
+    	update BOARD 
+    	set B_PVIEW = B_PVIEW + 1 where B_NUM = #{value}
+    </update>
+        <delete id="deleteBoard" parameterType="int">
+    	delete from BOARD 
+    	where B_NUM = #{b_num}
+    </delete>
+</mapper>

@@ -1,0 +1,12 @@
+test = YUNJUYEON
+GITHUB TEST
+
+파일 내용 변경하기
+
+깃 테스트 하는 중 
+
+kosmo에서 java 공부 중 입니다.
+
+git cherry-pick을 해 보겠습니다.
+
+다시 브랜치를 만들고 실습해 보겠습니다.
